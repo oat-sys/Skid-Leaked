@@ -116,7 +116,7 @@ local Window = BetterOrion:MakeWindow({
         ShowPing = true,
         ShowName = true,
         ShowClockTime = true,
-        Icon = "heart"
+        Icon = "crown"
     }
 })
 
@@ -6175,9 +6175,9 @@ SLeft:AddButton({
     end
 })
 
--- แก้ปัญหา Out of local registers โดยแยกตัวแปรออกเป็นตาราง global และลดการใช้ local variables ในฟังก์ชัน
 
-local hkState = {
+
+hkState = {
     KickAll = false,
     KillAll = false,
     KickFriendWL = true,
@@ -6194,14 +6194,14 @@ local hkState = {
 }
 
 -- ฟังก์ชัน helper
-local function hkIsGrabbed(char)
+function hkIsGrabbed(char)
     if not char then return false end
     local hum = char:FindFirstChildOfClass("Humanoid")
     if not hum then return false end
     return hum.SeatPart ~= nil
 end
 
-local function hkDestroyBlob(blob)
+function hkDestroyBlob(blob)
     if blob and blob.Parent then
         pcall(function()
             ReplicatedStorage.MenuToys.DestroyToy:FireServer(blob)
@@ -6209,7 +6209,7 @@ local function hkDestroyBlob(blob)
     end
 end
 
-local function hkGetFriends()
+function hkGetFriends()
     local ok, pages = pcall(function()
         return Players:GetFriendsAsync(LocalPlayer.UserId)
     end)
@@ -6228,8 +6228,8 @@ end
 
 task.spawn(hkGetFriends)
 
--- แยกฟังก์ชันออกเป็นส่วนย่อย
-local function hkHandleBring(plr, rightDetector, rightWeld, creatureGrab, creatureRelease, plrHRP)
+
+function hkHandleBring(plr, rightDetector, rightWeld, creatureGrab, creatureRelease, plrHRP)
     local plrHum = plr.Character:FindFirstChild("Humanoid")
     if not (plrHum and plrHum.Health ~= 0 and hkState.Blob) then return end
     
@@ -6261,7 +6261,7 @@ local function hkHandleBring(plr, rightDetector, rightWeld, creatureGrab, creatu
     end
 end
 
-local function hkHandleKick(plr, rightDetector, rightWeld, creatureGrab, creatureDrop)
+function hkHandleKick(plr, rightDetector, rightWeld, creatureGrab, creatureDrop)
     if plr.Character.Parent == workspace then
         local hrp = plr.Character:FindFirstChild("HumanoidRootPart")
         if hrp then
@@ -6280,7 +6280,7 @@ local function hkHandleKick(plr, rightDetector, rightWeld, creatureGrab, creatur
     end
 end
 
-local function hkHandleKill(plr, rightDetector, rightWeld, creatureGrab, creatureRelease)
+function hkHandleKill(plr, rightDetector, rightWeld, creatureGrab, creatureRelease)
     local plrHum = plr.Character:FindFirstChild("Humanoid")
     if not (plrHum and plrHum.Health ~= 0 and hkState.Blob) then return end
     if hkState.BringTargets[plr.UserId] == "bris" then
@@ -6294,7 +6294,7 @@ local function hkHandleKill(plr, rightDetector, rightWeld, creatureGrab, creatur
     end
 end
 
-local function hkSpawnBlob()
+function hkSpawnBlob()
     local toysFolder = workspace:FindFirstChild(LocalPlayer.Name .. "SpawnedInToys")
     if toysFolder then
         for _, itm in pairs(toysFolder:GetChildren()) do
@@ -6569,7 +6569,7 @@ SRight:AddToggle({
 
 
 
-local Tab = Window:MakeTab({Name = "Settings", Icon = "settings"})
+Tab = Window:MakeTab({Name = "Settings", Icon = "settings"})
 BetterOrion:SetConfigTab("Settings")
 
 BetterOrion:SaveAndLoadSizes()
